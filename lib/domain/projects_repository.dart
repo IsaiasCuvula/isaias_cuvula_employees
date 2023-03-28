@@ -1,4 +1,4 @@
-import 'package:isaias_cuvula_employees/data/models/employee_project.dart';
+import 'package:isaias_cuvula_employees/data/models/models.dart';
 
 abstract class ProjectsRepository {
   Future<List<EmployeeProject>> getEmployeeProjectList();

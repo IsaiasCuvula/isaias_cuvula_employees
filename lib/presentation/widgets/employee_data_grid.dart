@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isaias_cuvula_employees/data/models/employees_pair.dart';
+import 'package:isaias_cuvula_employees/data/models/models.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class EmployeeDataGrid extends DataGridSource {

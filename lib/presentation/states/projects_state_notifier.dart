@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isaias_cuvula_employees/data/models/employee_project.dart';
-import 'package:isaias_cuvula_employees/data/models/employees_pair.dart';
-import 'package:isaias_cuvula_employees/domain/projects_provider.dart';
-import 'package:isaias_cuvula_employees/domain/projects_repository.dart';
+import 'package:isaias_cuvula_employees/data/models/models.dart';
+import 'package:isaias_cuvula_employees/domain/domain.dart';
 
 final projectsStateNotifierProvider = StateNotifierProvider<
     ProjectsStateNotifier, AsyncValue<List<EmployeePair>>>((ref) {
