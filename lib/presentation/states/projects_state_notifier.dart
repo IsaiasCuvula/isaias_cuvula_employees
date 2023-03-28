@@ -57,9 +57,9 @@ class ProjectsStateNotifier
           if (employee1.projectID == employee2.projectID &&
               employee1.empID != employee2.empID) {
             final daysWorked1 =
-                calculateDaysWorked(employee1.dateFrom, employee1.dateTo);
+                _calculateDaysWorked(employee1.dateFrom, employee1.dateTo);
             final daysWorked2 =
-                calculateDaysWorked(employee2.dateFrom, employee2.dateTo);
+                _calculateDaysWorked(employee2.dateFrom, employee2.dateTo);
             final daysWorkedTogether = min(daysWorked1, daysWorked2);
 
             employeePairs.add(
@@ -79,7 +79,7 @@ class ProjectsStateNotifier
     }
   }
 
-  int calculateDaysWorked(DateTime dateFrom, DateTime? dateTo) {
+  int _calculateDaysWorked(DateTime dateFrom, DateTime? dateTo) {
     dateTo ??= DateTime.now();
     final difference = dateTo.difference(dateFrom);
     return difference.inDays;
