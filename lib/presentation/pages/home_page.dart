@@ -30,43 +30,44 @@ class HomePage extends ConsumerWidget {
             final employeeDataSource = EmployeeDataGrid(
               employeePairData: employeesProjects,
             );
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    'Pair of employees who have worked together',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SfDataGrid(
-                  source: employeeDataSource,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  columns: [
-                    GridColumn(
-                      columnName: 'Employee ID#1',
-                      label: const GridTitle(title: 'Employee ID#1'),
-                    ),
-                    GridColumn(
-                      columnName: 'Employee ID#2',
-                      label: const GridTitle(title: 'Employee ID#2'),
-                    ),
-                    GridColumn(
-                      columnName: 'ProjectID',
-                      label: const GridTitle(title: 'ProjectID'),
-                    ),
-                    GridColumn(
-                      columnName: 'Days Worked',
-                      label: const GridTitle(
-                        title: 'Days Worked',
+            return employeesProjects.isEmpty
+                ? const EmptyProjectsPage()
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          'Pair of employees who have worked together',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            );
+                      SfDataGrid(
+                        source: employeeDataSource,
+                        columnWidthMode: ColumnWidthMode.fill,
+                        columns: [
+                          GridColumn(
+                            columnName: 'Employee ID#1',
+                            label: const GridTitle(title: 'Employee ID#1'),
+                          ),
+                          GridColumn(
+                            columnName: 'Employee ID#2',
+                            label: const GridTitle(title: 'Employee ID#2'),
+                          ),
+                          GridColumn(
+                            columnName: 'ProjectID',
+                            label: const GridTitle(title: 'ProjectID'),
+                          ),
+                          GridColumn(
+                            columnName: 'Days Worked',
+                            label: const GridTitle(
+                              title: 'Days Worked',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
           },
         ),
       ),
