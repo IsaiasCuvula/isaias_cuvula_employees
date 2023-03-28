@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/models/employee_project.dart';
+import '../../data/models/employee_project.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class EmployeeDataSource extends DataGridSource {
@@ -16,7 +16,7 @@ class EmployeeDataSource extends DataGridSource {
               ),
               DataGridCell<String>(
                 columnName: 'dateTo',
-                value: e.dateTo.toIso8601String(),
+                value: e.dateTo?.toIso8601String(),
               ),
             ],
           ),

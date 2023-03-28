@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isaias_cuvula_employees/pages/home_page.dart';
+import 'package:isaias_cuvula_employees/presentation/pages/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
