@@ -1,27 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isaias_cuvula_employees/data/models/employee_project.dart';
+import 'package:isaias_cuvula_employees/data/models/employees_pair.dart';
 import 'package:isaias_cuvula_employees/domain/projects_provider.dart';
 import 'package:isaias_cuvula_employees/domain/projects_repository.dart';
 
 final projectsStateNotifierProvider = StateNotifierProvider<
-    ProjectsStateNotifier, AsyncValue<List<EmployeeProject>>>((ref) {
+    ProjectsStateNotifier, AsyncValue<List<EmployeePair>>>((ref) {
   final projectsRepository = ref.read(projectsRepositoryProvider);
   return ProjectsStateNotifier(projectsRepository);
 });
 
 class ProjectsStateNotifier
-    extends StateNotifier<AsyncValue<List<EmployeeProject>>> {
+    extends StateNotifier<AsyncValue<List<EmployeePair>>> {
   ProjectsStateNotifier(this._projectsRepository)
       : super(const AsyncValue.loading());
 
   final ProjectsRepository _projectsRepository;
 
   Future<void> _fetchEmployeeProjects() async {
-    state = const AsyncValue.loading();
     try {
       final employeeProjects =
           await _projectsRepository.getEmployeeProjectList();
-      state = AsyncValue.data(employeeProjects);
+
+      _findCommonProjects(employeeProjects);
     } catch (error) {
       state = AsyncValue.error(error, StackTrace.current);
     }
@@ -32,6 +33,35 @@ class ProjectsStateNotifier
       await _projectsRepository.pickCSVFile().then((value) async {
         await _fetchEmployeeProjects();
       });
+    } catch (error) {
+      state = AsyncValue.error(error, StackTrace.current);
+    }
+  }
+
+  Future<void> _findCommonProjects(
+    List<EmployeeProject> employeeProjectsList,
+  ) async {
+    Set<EmployeePair> employeePairs = {};
+
+    try {
+      for (int i = 0; i < employeeProjectsList.length - 1; i++) {
+        final employee1 = employeeProjectsList[i];
+        for (int j = i + 1; j < employeeProjectsList.length; j++) {
+          final employee2 = employeeProjectsList[j];
+          if (employee1.projectID == employee2.projectID &&
+              employee1.empID != employee2.empID) {
+            employeePairs.add(
+              EmployeePair(
+                empId1: employee1.empID,
+                empId2: employee2.empID,
+                projectId: employee1.projectID,
+                daysWorked: 9,
+              ),
+            );
+          }
+        }
+      }
+      state = AsyncValue.data(employeePairs.toList());
     } catch (error) {
       state = AsyncValue.error(error, StackTrace.current);
     }
