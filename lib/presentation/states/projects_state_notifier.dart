@@ -5,13 +5,18 @@ import 'package:isaias_cuvula_employees/domain/domain.dart';
 final projectsStateNotifierProvider = StateNotifierProvider<
     ProjectsStateNotifier, AsyncValue<List<EmployeePair>>>((ref) {
   final projectsRepository = ref.read(projectsRepositoryProvider);
-  return ProjectsStateNotifier(projectsRepository);
+  return ProjectsStateNotifier(
+    projectsRepository,
+    const AsyncValue.data([]),
+  );
 });
 
 class ProjectsStateNotifier
     extends StateNotifier<AsyncValue<List<EmployeePair>>> {
-  ProjectsStateNotifier(this._projectsRepository)
-      : super(const AsyncValue.loading());
+  ProjectsStateNotifier(
+    this._projectsRepository,
+    AsyncValue<List<EmployeePair>> employeesPair,
+  ) : super(employeesPair);
 
   final ProjectsRepository _projectsRepository;
 
@@ -39,6 +44,7 @@ class ProjectsStateNotifier
   Future<void> _findCommonProjects(
     List<EmployeeProject> employeeProjectsList,
   ) async {
+    state = const AsyncValue.loading();
     Set<EmployeePair> employeePairs = {};
 
     try {
