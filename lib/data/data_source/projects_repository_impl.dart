@@ -36,10 +36,6 @@ class ProjectsRepositoryImpl implements ProjectsRepository {
 
   @override
   Future<List<EmployeeProject>> getEmployeeProjectList() async {
-    if (_employeesProjectsList.isEmpty) {
-      await pickCSVFile();
-      return _employeesProjectsList;
-    }
     return _employeesProjectsList;
   }
 }
