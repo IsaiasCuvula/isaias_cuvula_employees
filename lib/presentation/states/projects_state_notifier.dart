@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isaias_cuvula_employees/data/models/models.dart';
 import 'package:isaias_cuvula_employees/domain/domain.dart';
 
-final projectsStateNotifierProvider = StateNotifierProvider<
+final projectsStateNotifierProvider = StateNotifierProvider.autoDispose<
     ProjectsStateNotifier, AsyncValue<List<EmployeePair>>>((ref) {
   final projectsRepository = ref.read(projectsRepositoryProvider);
   return ProjectsStateNotifier(
@@ -54,12 +56,18 @@ class ProjectsStateNotifier
           final employee2 = employeeProjectsList[j];
           if (employee1.projectID == employee2.projectID &&
               employee1.empID != employee2.empID) {
+            final daysWorked1 =
+                calculateDaysWorked(employee1.dateFrom, employee1.dateTo);
+            final daysWorked2 =
+                calculateDaysWorked(employee2.dateFrom, employee2.dateTo);
+            final daysWorkedTogether = min(daysWorked1, daysWorked2);
+
             employeePairs.add(
               EmployeePair(
                 empId1: employee1.empID,
                 empId2: employee2.empID,
                 projectId: employee1.projectID,
-                daysWorked: 9,
+                daysWorked: daysWorkedTogether,
               ),
             );
           }
@@ -69,5 +77,11 @@ class ProjectsStateNotifier
     } catch (error) {
       state = AsyncValue.error(error, StackTrace.current);
     }
+  }
+
+  int calculateDaysWorked(DateTime dateFrom, DateTime? dateTo) {
+    dateTo ??= DateTime.now();
+    final difference = dateTo.difference(dateFrom);
+    return difference.inDays;
   }
 }
