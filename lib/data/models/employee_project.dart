@@ -16,12 +16,16 @@ class EmployeeProject {
 
   factory EmployeeProject.fromList(List<dynamic> list) {
     return EmployeeProject(
-      empID: int.parse(list[0].toString()),
-      projectID: int.parse(list[1].toString()),
-      dateFrom: DateTime.parse(list[2].toString()),
-      dateTo: list[3] == 'NULL'
-          ? DateTime.now()
-          : DateTime.parse(list[3].toString()),
-    );
+        empID: int.parse(list[0].toString()),
+        projectID: int.parse(list[1].toString()),
+        dateFrom: DateTime.parse(list[2].toString()),
+        dateTo: _parseNullableDate(list[3]));
+  }
+
+  static DateTime? _parseNullableDate(dynamic value) {
+    if (value == null || value.toString().toLowerCase() == "null") {
+      return DateTime.now();
+    }
+    return DateTime.parse(value.toString());
   }
 }
