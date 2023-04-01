@@ -35,7 +35,7 @@ class ProjectsRepositoryImpl implements ProjectsRepository {
   }
 
   @override
-  Future<List<EmployeeProject>> getEmployeeProjectList() async {
+  List<EmployeeProject> getEmployeeProjectList() {
     return _employeesProjectsList;
   }
 }

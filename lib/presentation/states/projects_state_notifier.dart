@@ -24,10 +24,8 @@ class ProjectsStateNotifier
 
   Future<void> _fetchEmployeeProjects() async {
     try {
-      final employeeProjects =
-          await _projectsRepository.getEmployeeProjectList();
-
-      _findCommonProjects(employeeProjects);
+      final employeeProjects = _projectsRepository.getEmployeeProjectList();
+      await _findCommonProjects(employeeProjects);
     } catch (error) {
       state = AsyncValue.error(error, StackTrace.current);
     }
