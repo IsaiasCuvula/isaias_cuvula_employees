@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isaias_cuvula_employees/data/models/models.dart';
 import 'package:isaias_cuvula_employees/domain/domain.dart';
@@ -54,20 +55,23 @@ class ProjectsStateNotifier
           final employee2 = employeeProjectsList[j];
           if (employee1.projectID == employee2.projectID &&
               employee1.empID != employee2.empID) {
-            final daysWorked1 =
-                _calculateDaysWorked(employee1.dateFrom, employee1.dateTo);
-            final daysWorked2 =
-                _calculateDaysWorked(employee2.dateFrom, employee2.dateTo);
-            final daysWorkedTogether = min(daysWorked1, daysWorked2);
-
-            employeePairs.add(
-              EmployeePair(
-                empId1: employee1.empID,
-                empId2: employee2.empID,
-                projectId: employee1.projectID,
-                daysWorked: daysWorkedTogether,
-              ),
+            final daysWorked = _calculateDaysWorked(
+              employee1.dateFrom,
+              employee1.dateTo as DateTime,
+              employee2.dateFrom,
+              employee2.dateTo as DateTime,
             );
+
+            if (daysWorked > 0) {
+              employeePairs.add(
+                EmployeePair(
+                  empId1: employee1.empID,
+                  empId2: employee2.empID,
+                  projectId: employee1.projectID,
+                  daysWorked: daysWorked,
+                ),
+              );
+            }
           }
         }
       }
@@ -77,9 +81,24 @@ class ProjectsStateNotifier
     }
   }
 
-  int _calculateDaysWorked(DateTime dateFrom, DateTime? dateTo) {
-    dateTo ??= DateTime.now();
-    final difference = dateTo.difference(dateFrom);
-    return difference.inDays;
+  int _calculateDaysWorked(
+    DateTime dateFrom1,
+    DateTime dateTo1,
+    DateTime dateFrom2,
+    DateTime dateTo2,
+  ) {
+    int daysInCommon = 0;
+    bool rangesOverlap =
+        (dateFrom1.isBefore(dateTo2) || dateFrom1.isAtSameMomentAs(dateTo2)) &&
+            (dateTo1.isAfter(dateFrom2) || dateTo1.isAtSameMomentAs(dateFrom2));
+
+    if (rangesOverlap) {
+      DateTime earliestStartDate =
+          dateFrom1.isBefore(dateFrom2) ? dateFrom2 : dateFrom1;
+      DateTime latestEndDate = dateTo1.isBefore(dateTo2) ? dateTo1 : dateTo2;
+      daysInCommon = latestEndDate.difference(earliestStartDate).inDays + 1;
+    }
+
+    return daysInCommon;
   }
 }
